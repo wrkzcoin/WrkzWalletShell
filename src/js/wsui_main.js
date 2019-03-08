@@ -1972,9 +1972,9 @@ function handleSendTransfer() {
         if (maxsend) sendInputAmount.value = maxsend;
     });
 
-    sendInputFee.value = 0.1;
+    sendInputFee.value = 0.05;
     function setPaymentIdState(addr) {
-        if (addr.length > 99) {
+        if (addr.length > 98) {
             sendInputPaymentId.value = '';
             sendInputPaymentId.setAttribute('disabled', true);
         } else {
@@ -2027,8 +2027,8 @@ function handleSendTransfer() {
 
         let total = 0;
         let amount = sendInputAmount.value ? parseFloat(sendInputAmount.value) : 0;
-        if (amount <= 0 || amount < config.mininumSend) {
-            formMessageSet('send', 'error', `Sorry, minimum amount you can send is ${config.mininumSend}`);
+        if (amount <= 0) {
+            formMessageSet('send', 'error', 'Sorry, invalid amount');
             return;
         }
 
