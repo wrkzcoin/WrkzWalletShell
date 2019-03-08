@@ -85,7 +85,7 @@
     "mac": {
       "artifactName": "${productName}-v${version}-${os}-${arch}.${ext}",
       "category": "public.app-category.business",
-      "target": "zip"
+      "target": "dmg"
     }
   },
   "postinstall": "./node_modules/.bin/electron-builder install-app-deps"
