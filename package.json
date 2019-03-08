@@ -1,7 +1,7 @@
 {
-  "name": "walletshell",
-  "productName": "WalletShell",
-  "description": "TurtleCoin GUI Wallet",
+  "name": "wrkzwalletshell",
+  "productName": "WrkzWalletShell",
+  "description": "WrkzCoin GUI Wallet",
   "version": "v0.3.11",
   "homepage": "https://github.com/turtlecoin/turtle-wallet-electron",
   "repository": "https://github.com/turtlecoin/turtle-wallet-electron",
