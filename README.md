@@ -1,10 +1,10 @@
-## WalletShell - GUI wallet for TurtleCoin.
+## WrkzWalletShell - GUI wallet for WrkzCoin.
 
 ![WalletShell Screens](https://i.imgur.com/41Ujq0S.gif "WalletShell Screens")
 
 ### Features:
 
-This wallet contains the basic functions required to manage your TurtleCoin assets:
+This wallet contains the basic functions required to manage your WrkzCoin assets:
 
 * Wallet creation:
   * Create new wallet.
@@ -28,7 +28,7 @@ This wallet contains the basic functions required to manage your TurtleCoin asse
   * Allow to optionally create password protected address book.
 * Misc:
   * Option to use system tray (on closing/minimizing wallet)
-  * Provides list of public nodes, fetch/updated daily from [turtlecoin-nodes-json](https://github.com/turtlecoin/turtlecoin-nodes-json) repo.
+  * Provides list of public nodes, fetch/updated daily from [wrkzcoin-nodes-json](https://github.com/wrkzcoin/wrkzcoin-nodes-json) repo.
   * Allow to add custom node address.
   * Theme: Dark & Light Mode
   * [Keyboard shortcuts](docs/shortcut.md)
@@ -36,24 +36,24 @@ This wallet contains the basic functions required to manage your TurtleCoin asse
 ### Download &amp; Run WalletShell
 
 #### Windows:
-1. Download the latest installer here: https://github.com/turtlecoin/turtle-wallet-electron/releases/latest
-2. Run the installer (`walletshell-<version>-win-setup.exe`) and follow the installation wizard.
-3. Launch WalletShell via start menu or desktop shortcut.
+1. Download the latest installer here: https://github.com/wrkzcoin/WrkzWalletShell/releases/latest
+2. Run the installer (`WrkzWalletShell-<version>-win-setup.exe`) and follow the installation wizard.
+3. Launch WrkzWalletShell via start menu or desktop shortcut.
 
 #### GNU/Linux (AppImage):
-1. Download latest AppImage bundle here: https://github.com/turtlecoin/turtle-wallet-electron/releases/latest
-2. Make it executable, either via GUI file manager or command line, e.g. `chmod +x walletshell-<version>-linux.AppImage`
+1. Download latest AppImage bundle here: https://github.com/wrkzcoin/WrkzWalletShell/releases/latest
+2. Make it executable, either via GUI file manager or command line, e.g. `chmod +x WrkzWalletShell-<version>-linux.AppImage`
 3. Run/execute the file, double click in file manager, or run via shell/command line (See: https://docs.appimage.org/user-guide/run-appimages.html)
 
 #### macOS
-1. Download latest archive here: https://github.com/turtlecoin/turtle-wallet-electron/releases/latest
-2. Extract downloaded zip archived
-3. Run the executable binary (`WalletShell.app/Contents/MacOs/WalletShell`)
+1. Download latest archive here: https://github.com/wrkzcoin/WrkzWalletShell/releases/latest
+2. Install the application from `dmg` file
+3. Launch WrkzWalletShell via application.
 
-### Using WalletShell
+### Using WrkzWalletShell
 Please visit our wiki page: [WalletShell User Guide](../../wiki).
 
-### Building/Packaging WalletShell
+### Building/Packaging (Forked from TurtleCoin WalletShell)
 You need to have `Node.js` and `npm` installed, go to https://nodejs.org and find out how to get it installed on your platform.
 
 Once you have Node+npm installed:
