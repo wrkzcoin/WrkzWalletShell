@@ -15,7 +15,7 @@
     "dist-mac": "./node_modules/.bin/electron-builder --x64 --mac -c.extraResources=./bin/osx/wrkz-service"
   },
   "keywords": [],
-  "author": "Rixombea, Macroshock, TurtleCoin Developers",
+  "author": "WrkzCoin Developers",
   "license": "ISC",
   "devDependencies": {
     "devtron": "^1.4.0",
@@ -68,14 +68,14 @@
       "target": [
         "AppImage"
       ],
-      "maintainer": "rixombea (@labaylabay)",
+      "maintainer": "WrkzCoin Developers",
       "category": "Office",
-      "vendor": "TurtleCoin",
-      "synopsis": "TurtleCoin GUI Wallet"
+      "vendor": "WrkzCoin",
+      "synopsis": "WrkzCoin GUI Wallet"
     },
     "win": {
       "target": "nsis",
-      "publisherName": "TurtleCoin"
+      "publisherName": "WrkzCoin"
     },
     "nsis": {
       "artifactName": "${productName}-v${version}-${os}-${arch}-setup.${ext}",
