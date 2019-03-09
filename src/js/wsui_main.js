@@ -1972,7 +1972,7 @@ function handleSendTransfer() {
         if (maxsend) sendInputAmount.value = maxsend;
     });
 
-    sendInputFee.value = 0.05;
+    sendInputFee.value = CFG_MIN_SEND;
     function setPaymentIdState(addr) {
         if (addr.length > 98) {
             sendInputPaymentId.value = '';
