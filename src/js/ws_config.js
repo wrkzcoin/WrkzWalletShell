@@ -33,7 +33,6 @@ config.blockExplorerUrl = 'https://myexplorer.wrkz.work/?hash=[[TX_HASH]]#blockc
 // default remote node to connect to, set this to a known reliable node for 'just works' user experience
 config.remoteNodeDefaultHost = 'wrkz-nodes.wrkz.work';
 
-
 // remote node list update url, set to null if you don't have one
 // for TRTL:
 // raw list: https://raw.githubusercontent.com/turtlecoin/turtlecoin-nodes-json/master/turtlecoin-nodes.json
