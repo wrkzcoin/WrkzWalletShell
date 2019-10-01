@@ -17,7 +17,7 @@ config.walletFileDefaultExt = 'wrkz';
 config.walletServiceBinaryFilename = 'wrkz-service';
 
 // version on the bundled service (turtle-service)
-config.walletServiceBinaryVersion = "v0.2.9";
+config.walletServiceBinaryVersion = "v0.2.12";
 
 // config file format supported by wallet service, possible values:
 // ini -->  for turtle service (or its forks) version <= v0.8.3
@@ -44,13 +44,13 @@ config.remoteNodeListFiltered = false;
 
 // fallback remote node list, in case fetching update failed, fill this with known to works remote nodes
 config.remoteNodeListFallback = [
-  'node-pr1.wrkz.work:17856',
   'node-pr2.wrkz.work:17856',
-  'node-pr3.wrkz.work:17856',
   'node-sg1.wrkz.work:17856',
   'node-us1.wrkz.work:17856',
-  'wrkz-stroppy.ddns.net:17856',
-  'wrkz.stx.nl:17856',
+  '5.172.219.174:17856',
+  'publicnode.ydns.eu:17856',
+  'spookypool.nl:17856',
+  'wrkz.xyz:17856',
 ];
 config.remoteNodeCacheSupported = false;
 config.remoteNodeSslSupported = false;
@@ -69,7 +69,7 @@ config.integratedAddressLength = config.addressLength + ((64 * 11) / 8);
 // minimum fee for sending transaction
 config.minimumFee = 0.05;
 // minimum amount for sending transaction
-config.mininumSend = 0.1;
+config.mininumSend = 1;
 // default mixin/anonimity for transaction
 config.defaultMixin = 3;
 // to represent human readable value
