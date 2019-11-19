@@ -50,23 +50,20 @@ This wallet contains the basic functions required to manage your WrkzCoin assets
 2. Install the application from `dmg` file
 3. Launch WrkzWalletShell via application.
 
-### Using WrkzWalletShell
-Please visit our wiki page: [WalletShell User Guide](../../wiki).
-
 ### Building/Packaging (Forked from TurtleCoin WalletShell)
 You need to have `Node.js` and `npm` installed, go to https://nodejs.org and find out how to get it installed on your platform.
 
 Once you have Node+npm installed:
 ```
 # assuming you're building it on GNU/Linux
-# first, download turtle-service binary for each platform
-# from TurtleCoin official repo
-# https://github.com/turtlecoin/turtlecoin/releases
-# extract the turtle-service executable somewhere
+# first, download wrkz-service binary for each platform
+# from WrkzCoin official repo
+# https://github.com/wrkzcoin/wrkzcoin/releases
+# extract the wrkz-service executable somewhere
 
 # clone the repo
-$ git clone https://github.com/turtlecoin/turtle-wallet-electron
-$ cd turtle-wallet-electron
+$ git clone https://github.com/wrkzcoin/WrkzWalletShell
+$ cd WrkzWalletShell
 
 # install dependencies
 $ npm install
@@ -79,17 +76,17 @@ $ cp ./src/assets/icon.* ./build/
 
 # build GNU/Linux package
 $ mkdir -p ./bin/lin
-$ cp /path/to/linux-version-of/turtle-service ./bin/lin/
+$ cp /path/to/linux-version-of/wrkz-service ./bin/lin/
 $ npm run dist-lin
 
 # build Windows package (you need to have wine 2.0+ installed)
 $ mkdir -p ./bin/win
-$ cp /path/to/win-version-of/turtle-service.exe ./bin/win/
+$ cp /path/to/win-version-of/wrkz-service.exe ./bin/win/
 $ npm run dist-win
 
 # build OSX package
 $ mkdir -p ./bin/osx
-$ cp /path/to/osx-version-of/turtle-service ./bin/osx/
+$ cp /path/to/osx-version-of/wrkz-service ./bin/osx/
 $ npm run dist-mac
 ```
 
