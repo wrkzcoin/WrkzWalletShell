@@ -85,7 +85,6 @@ let showkeyInputSeed;
 let sendInputAddress;
 let sendInputAmount;
 let sendInputPaymentId;
-let sendInputFee;
 let sendButtonSend;
 let sendMaxAmount;
 let sendOptimize;
@@ -181,7 +180,6 @@ function populateElementVars() {
     sendInputAddress = document.getElementById('input-send-address');
     sendInputAmount = document.getElementById('input-send-amount');
     sendInputPaymentId = document.getElementById('input-send-payid');
-    sendInputFee = document.getElementById('input-send-fee');
     sendButtonSend = document.getElementById('button-send-send');
     // maxSendFormHelp = document.getElementById('sendFormHelp');
     sendMaxAmount = document.getElementById('sendMaxAmount');
@@ -223,7 +221,6 @@ let jtfr = {
         "TurtleCoin",
         "TRTL",
         "turtle-service",
-        "CFG_MIN_FEE",
         "CFG_MIN_SEND"
     ],
     tReplace: [
@@ -232,7 +229,6 @@ let jtfr = {
         config.assetName,
         config.assetTicker,
         config.walletServiceBinaryFilename,
-        config.minimumFee,
         config.mininumSend
     ]
 };
@@ -1982,7 +1978,6 @@ function handleSendTransfer() {
         if (maxsend) sendInputAmount.value = maxsend;
     });
 
-    sendInputFee.value = config.minimumFee;
     function setPaymentIdState(addr) {
         if (addr.length > config.addressLength) {
             sendInputPaymentId.value = '';
@@ -2045,21 +2040,6 @@ function handleSendTransfer() {
         total += amount;
         let txAmount = wsutil.amountForImmortal(amount); // final transfer amount
 
-        let fee = sendInputFee.value ? parseFloat(sendInputFee.value) : 0;
-        let minFee = config.minimumFee;
-        if (fee < minFee) {
-            formMessageSet('send', 'error', `Fee can't be less than ${wsutil.amountForMortal(minFee)}`);
-            return;
-        }
-
-        if (precision(fee) > config.decimalPlaces) {
-            formMessageSet('send', 'error', `Fee can't have more than  ${config.decimalPlaces} decimal places`);
-            return;
-        }
-
-        total += fee;
-        let txFee = wsutil.amountForImmortal(fee);
-
         let nodeFee = wsession.get('nodeFee') || 0; // nodeFee value is already for mortal
         total += nodeFee;
         let txTotal = wsutil.amountForMortal(total);
@@ -2078,8 +2058,7 @@ function handleSendTransfer() {
         // todo: adjust decimal
         let tx = {
             address: recipientAddress,
-            amount: txAmount,
-            fee: txFee
+            amount: txAmount
         };
 
         if (paymentId.length) tx.paymentId = paymentId;
@@ -2095,8 +2074,6 @@ function handleSendTransfer() {
                         <dd class="${paymentId.length ? 'dd-ib' : 'hidden'}">${paymentId.length ? paymentId : 'N/A'}</dd>
                         <dt class="dt-ib">Amount:</dt>
                         <dd class="dd-ib">${amount} ${config.assetTicker}</dd>
-                        <dt class="dt-ib">Transaction Fee:</dt>
-                        <dd class="dd-ib">${fee} ${config.assetTicker}</dd>
                         <dt class="dt-ib">Node Fee:</dt>
                         <dd class="dd-ib">${(nodeFee > 0 ? nodeFee : '0.00')} ${config.assetTicker}</dd>
                         <dt class="dt-ib">Total:</dt>
