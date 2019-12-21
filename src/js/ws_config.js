@@ -46,11 +46,11 @@ config.remoteNodeListFiltered = false;
 config.remoteNodeListFallback = [
   'node-pr2.wrkz.work:17856',
   'node-sg1.wrkz.work:17856',
+  'node-us1.wrkz.work:17856',
   '5.172.219.174:17856',
   'publicnode.ydns.eu:17856',
+  'spookypool.nl:17856',
   'wrkz.xyz:17856',
-  'fastpool.xyz:17856',
-  'myexplorer.wrkz.work:17856',
 ];
 config.remoteNodeCacheSupported = false;
 config.remoteNodeSslSupported = false;
