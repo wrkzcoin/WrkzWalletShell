@@ -1,0 +1,103 @@
+name: Build Pluton
+on:
+  push:
+  pull_request:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    name: ${{ matrix.target }} Build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          [
+            x86_64-pc-windows-msvc,
+            x86_64-apple-darwin,
+            x86_64-unknown-linux-gnu,
+          ]
+        include:
+          - target: x86_64-pc-windows-msvc
+            os: windows-latest
+          - target: x86_64-apple-darwin
+            os: macos-latest
+          - target: x86_64-unknown-linux-gnu
+            os: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '10.x'
+
+      - name: Setup MSBuild.exe
+        if: matrix.os == 'windows-latest'
+        uses: warrenbuckley/Setup-MSBuild@v1
+
+      - name: Setup Cache
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ matrix.os }}-deps
+
+      - name: Dependencies
+        run: yarn
+
+      - name: Build for Windows
+        if matrix.target == 'x86_64-pc-windows-msvc'
+        run: |
+          yarn dist-win
+
+      - name: Build for MacOS
+        if matrix.target == 'x86_64-apple-darwin'
+        run: |
+          chmod +x ./bin/osx/wrkz-service
+          yarn dist-mac
+
+      - name: Build for Linux
+        if matrix.target == 'x86_64-unknown-linux-gnu'
+        run: |
+          chmod +x ./bin/lin/wrkz-service
+          yarn dist-lin
+
+      - name: Prepare to Deploy
+        id: before_deploy
+        shell: bash
+        run: |
+          rm -rf ./release/*.blockmap
+          rm -rf ./release/*.zip
+          rm -rf ./release/*-unpacked
+          rm -rf ./release/mac
+          export NAME=$(ls dist/WrkzWalletShell-*)
+          echo ::set-output name=file_name::${NAME:8}
+
+      # Upload to AMZ
+      - name: Set up Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7 # Or other version
+      - name: Install awscli via pipx # Isolates dependencies
+        shell: bash
+        run: |
+          export PATH=~/.local/bin:$PATH
+          pip install --user pipx
+          pipx install awscli
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+      - name: Upload S3
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" == "Windows" ]; then
+            ~/.local/bin/aws s3 cp "./dist/${{ steps.before_deploy.outputs.file_name }}" "s3://wrkzcoin/WrkzWalletShell/${{ matrix.target }}-${{ steps.before_deploy.outputs.file_name }}"
+          elif [ "$RUNNER_OS" == "Linux" ]; then
+            aws s3 cp "./dist/${{ steps.before_deploy.outputs.file_name }}" "s3://wrkzcoin/WrkzWalletShell/${{ matrix.target }}-${{ steps.before_deploy.outputs.file_name }}"
+          elif [ "$RUNNER_OS" == "macOS" ]; then
+            ~/.local/bin/aws s3 cp "./dist/${{ steps.before_deploy.outputs.file_name }}" "s3://wrkzcoin/WrkzWalletShell/${{ matrix.target }}-${{ steps.before_deploy.outputs.file_name }}"
+          fi
