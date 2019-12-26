@@ -195,16 +195,12 @@ class WalletShellApi {
             params.paymentId = params.paymentId || false;
             if (!params.address) return reject(new Error('Missing recipient address parameter'));
             if (!params.amount) return reject(new Error('Missing transaction amount parameter'));
-            // params.fee = 50000;
-            //[{address: "Wrkzxxxx...", amount: 50}];
+
             var req_params = {
-                transfers: [{ address: params.address, amount: params.amount }],
-                anonymity: config.defaultMixin,
-                fee: 50000
+                transfers: [{ address: params.address, amount: params.amount }]
             };
             if (params.paymentId) req_params.paymentId = params.paymentId;
-            // give extra long timeout
-            // console.log(params);
+
             this._sendRequest('sendTransaction', req_params, 10000).then((result) => {
                 return resolve(result);
             }).catch((err) => {
