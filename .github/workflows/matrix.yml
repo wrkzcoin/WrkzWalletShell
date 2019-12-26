@@ -67,10 +67,10 @@ jobs:
         id: before_deploy
         shell: bash
         run: |
-          rm -rf ./release/*.blockmap
-          rm -rf ./release/*.zip
-          rm -rf ./release/*-unpacked
-          rm -rf ./release/mac
+          rm -rf ./dist/*.blockmap
+          rm -rf ./dist/*.zip
+          rm -rf ./dist/*-unpacked
+          rm -rf ./dist/mac
           export NAME=$(ls dist/WrkzWalletShell-*)
           echo ::set-output name=file_name::${NAME:5}
 
