@@ -72,7 +72,7 @@ jobs:
           rm -rf ./release/*-unpacked
           rm -rf ./release/mac
           export NAME=$(ls dist/WrkzWalletShell-*)
-          echo ::set-output name=file_name::${NAME:8}
+          echo ::set-output name=file_name::${NAME:5}
 
       # Upload to AMZ
       - name: Set up Python
