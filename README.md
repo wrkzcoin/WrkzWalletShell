@@ -1,6 +1,15 @@
 ## WrkzWalletShell - GUI wallet for WrkzCoin.
+# WRKZ Pluton Wallet
 
-![WalletShell Screens](https://i.imgur.com/41Ujq0S.gif "WalletShell Screens")
+![Download Count](https://img.shields.io/github/downloads/wrkzcoin/WrkzWalletShell/total.svg?include_prereleases)
+![Open Issue Count](https://img.shields.io/github/issues/wrkzcoin/WrkzWalletShell)
+![License](https://img.shields.io/github/license/wrkzcoin/WrkzWalletShell)
+![Version](https://img.shields.io/github/v/release/wrkzcoin/WrkzWalletShell?include_prereleases)
+
+### Master Build Status
+
+![Master Build Status](https://github.com/wrkzcoin/WrkzWalletShell/workflows/Build%20WrkzWalletShell/badge.svg?branch=master)
+
 
 ### Features:
 
