@@ -44,13 +44,17 @@ config.remoteNodeListFiltered = false;
 
 // fallback remote node list, in case fetching update failed, fill this with known to works remote nodes
 config.remoteNodeListFallback = [
-  'node-pr2.wrkz.work:17856',
+  'node-eu1.wrkz.work:17856',
   'node-sg1.wrkz.work:17856',
   '5.172.219.174:17856',
   'publicnode.ydns.eu:17856',
   'wrkz.xyz:17856',
   'fastpool.xyz:17856',
   'myexplorer.wrkz.work:17856',
+  'stroppy.servebeer.com:17856',
+  'wrkz.pubnodes.com:17856',
+  'derogold4ever.online:17856',
+  'wrkz.luxflow.net:17856',
 ];
 config.remoteNodeCacheSupported = false;
 config.remoteNodeSslSupported = false;
