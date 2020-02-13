@@ -16,7 +16,6 @@ const connInfoDiv = document.getElementById('conn-info');
 const WFCLEAR_INTERVAL = 5;
 
 let WFCLEAR_TICK = 0;
-let FUSION_CHECK = 0;
 let TX_INITIALIZED = false;
 
 function setWinTitle(title) {
@@ -194,23 +193,6 @@ function updateSyncProgress(data) {
     }
     WFCLEAR_TICK++;
 
-    // handle failed fusion
-    if (true === wsession.get('fusionProgress')) {
-        let lockedBalance = wsession.get('walletLockedBalance');
-        if (lockedBalance <= 0 && FUSION_CHECK === 3) {
-            fusionCompleted();
-        }
-        FUSION_CHECK++;
-    }
-}
-
-function fusionCompleted() {
-    const fusionProgressBar = document.getElementById('fusionProgress');
-    fusionProgressBar.classList.add('hidden');
-    FUSION_CHECK = 0;
-    wsession.set('fusionStarted', false);
-    wsession.set('fusionProgress', false);
-    wsutil.showToast('Optimization completed. You may need to repeat the process until your wallet is fully optimized.', 5000);
 }
 
 function updateBalance(data) {
@@ -244,16 +226,6 @@ function updateBalance(data) {
     balanceLockedField.innerHTML = bLocked;
     wsession.set('walletUnlockedBalance', bUnlocked);
     wsession.set('walletLockedBalance', bLocked);
-    // update fusion progress
-    if (true === wsession.get('fusionProgress')) {
-        if (wsession.get('fusionStarted') && parseInt(bLocked, 10) <= 0) {
-            fusionCompleted();
-        } else {
-            if (parseInt(bLocked, 10) > 0) {
-                wsession.set('fusionStarted', true);
-            }
-        }
-    }
 
     let walletFile = require('path').basename(settings.get('recentWallet'));
     let wintitle = `(${walletFile}) - ${bUnlocked} ${config.assetTicker}`;
@@ -465,20 +437,6 @@ function updateUiState(msg) {
             break;
         case 'sectionChanged':
             if (msg.data) resetFormState(msg.data);
-            break;
-        case 'fusionTxCompleted':
-            const fusionProgressBar = document.getElementById('fusionProgress');
-            if (msg.code === 0) { // skipped
-                wsession.set('fusionProgress', false);
-                fusionProgressBar.classList.add('hidden');
-                wsutil.showToast(msg.data, 5000);
-            } else {
-                // set progress flag
-                wsession.set('fusionProgress', true);
-                // show progress bar
-                fusionProgressBar.classList.remove('hidden');
-                // do nothing, just wait
-            }
             break;
         default:
             console.log('invalid command', msg);

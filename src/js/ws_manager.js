@@ -28,9 +28,6 @@ const ERROR_WALLET_PASSWORD = 'Failed to load your wallet, please check your pas
 const ERROR_WALLET_IMPORT = 'Import failed, please check that you have entered all information correctly';
 const ERROR_WALLET_CREATE = 'Wallet can not be created, please check your input and try again';
 const ERROR_RPC_TIMEOUT = 'Unable to communicate with selected node, please try again in a few seconds or switch to another node address';
-const INFO_FUSION_DONE = 'Wallet optimization completed, your balance may appear incorrect for a while.';
-const INFO_FUSION_SKIPPED = 'Wallet already optimized. No further optimization is needed.';
-const ERROR_FUSION_FAILED = 'Unable to optimize your wallet, please try again in a few seconds';
 
 var WalletShellManager = function () {
     if (!(this instanceof WalletShellManager)) {
@@ -53,7 +50,6 @@ var WalletShellManager = function () {
     this.serviceActiveArgs = [];
     this.serviceApi = null;
     this.syncWorker = null;
-    this.fusionTxHash = [];
 };
 
 WalletShellManager.prototype.getUnusedPort = function() {
@@ -684,137 +680,6 @@ WalletShellManager.prototype.rescanWallet = function (scanHeight) {
     });
 };
 
-WalletShellManager.prototype._fusionGetMinThreshold = function (threshold, minThreshold, maxFusionReadyCount, counter) {
-    let wsm = this;
-    return new Promise((resolve, reject) => {
-        counter = counter || 0;
-        threshold = threshold || (parseInt(wsession.get('walletUnlockedBalance'), 10) * 100) + 1;
-        threshold = parseInt(threshold, 10);
-        minThreshold = minThreshold || threshold;
-        maxFusionReadyCount = maxFusionReadyCount || 0;
-
-        let maxThreshCheckIter = 20;
-
-        wsm.serviceApi.estimateFusion({ threshold: threshold }).then((res) => {
-            // nothing to optimize
-            if (counter === 0 && res.fusionReadyCount === 0) return resolve(0);
-            // stop at maxThreshCheckIter or when threshold too low
-            if (counter > maxThreshCheckIter || threshold < 10) return resolve(minThreshold);
-            // we got a possibly best minThreshold
-            if (res.fusionReadyCount < maxFusionReadyCount) {
-                return resolve(minThreshold);
-            }
-            // continue to find next best minThreshold
-            maxFusionReadyCount = res.fusionReadyCount;
-            minThreshold = threshold;
-            threshold /= 2;
-            counter += 1;
-            resolve(wsm._fusionGetMinThreshold(threshold, minThreshold, maxFusionReadyCount, counter).then((res) => {
-                return res;
-            }));
-        }).catch((err) => {
-            return reject(new Error(err));
-        });
-    });
-};
-
-WalletShellManager.prototype._fusionSendTx = function (threshold, counter) {
-    let wsm = this;
-    const wtime = ms => new Promise(resolve => setTimeout(resolve, ms));
-
-    return new Promise((resolve, reject) => {
-        counter = counter || 0;
-        let maxIter = 256;
-        if (counter >= maxIter) return resolve(wsm.fusionTxHash); // stop at max iter
-
-        wtime(2400).then(() => {
-            // keep sending fusion tx till it hit IOOR or reaching max iter 
-            log.debug(`send fusion tx, iteration: ${counter}`);
-            wsm.serviceApi.sendFusionTransaction({ threshold: threshold }).then((resp) => {
-                wsm.fusionTxHash.push(resp.transactionHash);
-                counter += 1;
-                return resolve(wsm._fusionSendTx(threshold, counter).then((resp) => {
-                    return resp;
-                }));
-            }).catch((err) => {
-                if (typeof err === 'string') {
-                    if (!err.toLocaleLowerCase().includes('index is out of range')) {
-                        log.debug(err);
-                        return reject(new Error(err));
-                    }
-                } else if (typeof err === 'object') {
-                    if (!err.message.toLowerCase().includes('index is out of range')) {
-                        log.debug(err);
-                        return reject(new Error(err));
-                    }
-                }
-
-                counter += 1;
-                return resolve(wsm._fusionSendTx(threshold, counter).then((resp) => {
-                    return resp;
-                }));
-            });
-
-        });
-    });
-};
-
-WalletShellManager.prototype.optimizeWallet = function () {
-    let wsm = this;
-    log.debug('running optimizeWallet');
-    return new Promise((resolve, reject) => {
-        wsm.fusionTxHash = [];
-        wsm._fusionGetMinThreshold().then((res) => {
-            if (res <= 0) {
-                wsm.notifyUpdate({
-                    type: 'fusionTxCompleted',
-                    data: INFO_FUSION_SKIPPED,
-                    code: 0
-                });
-                log.debug('fusion skipped');
-                log.debug(wsm.fusionTxHash);
-                return resolve(INFO_FUSION_SKIPPED);
-            }
-
-            log.debug(`performing fusion tx, threshold: ${res}`);
-
-            return resolve(
-                wsm._fusionSendTx(res).then(() => {
-                    wsm.notifyUpdate({
-                        type: 'fusionTxCompleted',
-                        data: INFO_FUSION_DONE,
-                        code: 1
-                    });
-                    log.debug('fusion done');
-                    log.debug(wsm.fusionTxHash);
-                    return INFO_FUSION_DONE;
-                }).catch((err) => {
-                    let msg = err.message.toLowerCase();
-                    let outMsg = ERROR_FUSION_FAILED;
-                    switch (msg) {
-                        case 'index is out of range':
-                            outMsg = wsm.fusionTxHash.length >= 1 ? INFO_FUSION_DONE : INFO_FUSION_SKIPPED;
-                            break;
-                        default:
-                            break;
-                    }
-                    log.debug(`fusionTx outMsg: ${outMsg}`);
-                    log.debug(wsm.fusionTxHash);
-                    wsm.notifyUpdate({
-                        type: 'fusionTxCompleted',
-                        data: outMsg,
-                        code: outMsg === INFO_FUSION_SKIPPED ? 0 : 1
-                    });
-                    return outMsg;
-                })
-            );
-        }).catch((err) => {
-            // todo handle this differently!
-            log.debug('fusion error');
-            return reject((err.message));
-        });
-    });
-};
 
 WalletShellManager.prototype.networkStateUpdate = function (state) {
     if (!this.syncWorker) return;

@@ -223,29 +223,7 @@ class WalletShellApi {
             });
         });
     }
-    estimateFusion(params) {
-        return new Promise((resolve, reject) => {
-            params = params || {};
-            if (!params.threshold) return reject(new Error('Missing threshold parameter'));
-            this._sendRequest('estimateFusion', params).then((result) => {
-                return resolve(result);
-            }).catch((err) => {
-                return reject(err);
-            });
-        });
-    }
-    sendFusionTransaction(params) {
-        return new Promise((resolve, reject) => {
-            params = params || {};
-            if (!params.threshold) return reject(new Error('Missing threshold parameter'));
-            if (!params.anonimity) params.anonimity = this.anonimity;
-            this._sendRequest('sendFusionTransaction', params).then((result) => {
-                return resolve(result);
-            }).catch((err) => {
-                return reject(err);
-            });
-        });
-    }
+
     createIntegratedAddress(params) {
         return new Promise((resolve, reject) => {
             params = params || {};

@@ -34,8 +34,6 @@ var WalletShellSession = function (opts) {
         uiStateChanged: false,
         defaultTitle: DEFAULT_TITLE,
         debug: opts.debug || false,
-        fusionStarted: false,
-        fusionProgress: false,
         addressBookErr: false
     };
 

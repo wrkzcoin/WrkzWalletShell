@@ -87,7 +87,6 @@ let sendInputAmount;
 let sendInputPaymentId;
 let sendButtonSend;
 let sendMaxAmount;
-let sendOptimize;
 // create wallet
 let overviewButtonCreate;
 let walletCreateInputPath;
@@ -183,7 +182,6 @@ function populateElementVars() {
     sendButtonSend = document.getElementById('button-send-send');
     // maxSendFormHelp = document.getElementById('sendFormHelp');
     sendMaxAmount = document.getElementById('sendMaxAmount');
-    sendOptimize = document.getElementById('button-send-optimize');
     // create wallet
     overviewButtonCreate = document.getElementById('button-create-create');
     walletCreateInputPath = document.getElementById('input-create-path');
@@ -365,8 +363,6 @@ function switchTab() {
     if (!isServiceReady) {
         skippedSections = ['section-send', 'section-transactions'];
         if (nextSection === 'section-overview') nextSection = 'section-welcome';
-    } else if (wsession.get('fusionProgress')) {
-        skippedSections = ['section-send'];
     }
 
     while (skippedSections.indexOf(nextSection) >= 0) {
@@ -397,13 +393,6 @@ function changeSection(sectionId, targetRedir) {
     let origTarget = targetSection;
     let finalTarget = targetSection;
     let toastMsg = '';
-
-
-    if (needSynced.includes(targetSection) && wsession.get('fusionProgress')) {
-        // fusion in progress, return early
-        wsutil.showToast('Wallet optimization in progress, please wait');
-        return;
-    }
 
     if (needServiceReady.includes(targetSection) && !isServiceReady) {
         // no access to wallet, send, tx when no wallet opened
@@ -2139,7 +2128,7 @@ function handleSendTransfer() {
                     Please wait for a few blocks, check your balance and transaction history before resending!`;
                 } else if (err.includes('size is too big')) {
                     msg = `Failed to send Transaction:
-                    Transaction size is too big. Please optimize your wallet, or try sending in smaller amount`;
+                    Transaction size is too big. Try sending in smaller amount or use Pluton`;
                 }
                 formMessageSet('send', 'error', `${msg}`);
             });
@@ -2147,31 +2136,6 @@ function handleSendTransfer() {
         });
     });
 
-    sendOptimize.addEventListener('click', () => {
-        if (!wsession.get('synchronized', false)) {
-            wsutil.showToast('Synchronization is in progress, please wait.');
-            return;
-        }
-
-        if (wsession.get('fusionProgress')) {
-            wsutil.showToast('Wallet optimization in progress, please wait');
-            return;
-        }
-
-        if (!confirm('You are about to perform wallet optimization. This process may take a while to complete, are you sure?')) return;
-        wsutil.showToast('Optimization started, your balance may appear incorrect during the process', 3000);
-
-        // start progress
-        let progressBar = document.getElementById('fusionProgress');
-        progressBar.classList.remove('hidden');
-        wsession.set('fusionProgress', true);
-        wsmanager.optimizeWallet().then(() => {
-            console.log('fusion started');
-        }).catch(() => {
-            console.log('fusion err');
-        });
-        return; // just return, it will notify when its done.
-    });
 }
 
 function resetTransactions() {
