@@ -28,7 +28,7 @@ config.walletServiceConfigFormat = "json";
 config.walletServiceRpcPort = 7856;
 
 // block explorer url, the [[TX_HASH]] will be substituted w/ actual transaction hash
-config.blockExplorerUrl = 'https://myexplorer.wrkz.work/?hash=[[TX_HASH]]#blockchain_transaction';
+config.blockExplorerUrl = 'https://myexplorer.wrkz.work/transaction.html?hash=[[TX_HASH]]';
 
 // default remote node to connect to, set this to a known reliable node for 'just works' user experience
 config.remoteNodeDefaultHost = 'wrkz-nodes.wrkz.work';
@@ -44,7 +44,6 @@ config.remoteNodeListFiltered = false;
 
 // fallback remote node list, in case fetching update failed, fill this with known to works remote nodes
 config.remoteNodeListFallback = [
-  'node-eu1.wrkz.work:17856',
   'node-sg1.wrkz.work:17856',
   '5.172.219.174:17856',
   'publicnode.ydns.eu:17856',
