@@ -1,6 +1,7 @@
 ## WrkzWalletShell - GUI wallet for WrkzCoin.
 
 ![Download Count](https://img.shields.io/github/downloads/wrkzcoin/WrkzWalletShell/total.svg?include_prereleases)
+[![GitHub contributors](https://img.shields.io/github/contributors-anon/wrkzcoin/WrkzWalletShell?label=Contributors)]
 ![Open Issue Count](https://img.shields.io/github/issues/wrkzcoin/WrkzWalletShell)
 ![License](https://img.shields.io/github/license/wrkzcoin/WrkzWalletShell)
 ![Version](https://img.shields.io/github/v/release/wrkzcoin/WrkzWalletShell?include_prereleases)
