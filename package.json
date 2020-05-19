@@ -10,9 +10,9 @@
     "start": "electron .",
     "debug": "electron . debug",
     "dev": "electron . dev",
-    "dist-win": "./node_modules/.bin/electron-builder --x64 --win -c.extraResources=./bin/win/wrkz-service.exe",
-    "dist-lin": "./node_modules/.bin/electron-builder --x64 --linux -c.extraResources=./bin/lin/wrkz-service",
-    "dist-mac": "./node_modules/.bin/electron-builder --x64 --mac -c.extraResources=./bin/osx/wrkz-service"
+    "dist-win": "./node_modules/.bin/electron-builder --publish=never --x64 --win -c.extraResources=./bin/win/wrkz-service.exe",
+    "dist-lin": "./node_modules/.bin/electron-builder --publish=never --x64 --linux -c.extraResources=./bin/lin/wrkz-service",
+    "dist-mac": "./node_modules/.bin/electron-builder --publish=never --x64 --mac -c.extraResources=./bin/osx/wrkz-service"
   },
   "keywords": [],
   "author": "WrkzCoin Developers",

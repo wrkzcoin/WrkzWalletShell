@@ -44,7 +44,7 @@ jobs:
           key: ${{ matrix.os }}-deps
 
       - name: Dependencies
-        run: GH_TOKEN=${{secrets.GH_TOKEN}} yarn
+        run: yarn
 
       - name: Build for Windows
         if: matrix.target == 'x86_64-pc-windows-msvc'
