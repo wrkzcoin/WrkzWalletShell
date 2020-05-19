@@ -2871,7 +2871,7 @@ function fetchNodeInfo(force) {
             label: h,
         };
 
-        let url = `http://${h}/feeinfo`;
+        let url = `http://${h}/fee`;
         reqs.push(function (callback) {
             return fetchWait(url)
                 .then((response) => {
