@@ -68,7 +68,6 @@
       "target": [
         "AppImage"
       ],
-      "publish" : [],
       "maintainer": "WrkzCoin Developers",
       "category": "Office",
       "vendor": "WrkzCoin",
@@ -76,7 +75,6 @@
     },
     "win": {
       "target": "nsis",
-      "publish" : [],
       "publisherName": "WrkzCoin"
     },
     "nsis": {
@@ -87,8 +85,7 @@
     "mac": {
       "artifactName": "${productName}-v${version}-${os}-${arch}.${ext}",
       "category": "public.app-category.business",
-      "target": "pkg",
-      "publish" : []
+      "target": "pkg"
     }
   },
   "postinstall": "./node_modules/.bin/electron-builder install-app-deps"
