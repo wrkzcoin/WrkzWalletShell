@@ -2,7 +2,7 @@
   "name": "wrkzwalletshell",
   "productName": "WrkzWalletShell",
   "description": "WrkzCoin GUI Wallet",
-  "version": "v0.3.18.145",
+  "version": "v0.3.19.170",
   "homepage": "https://github.com/wrkzcoin/WrkzWalletShell",
   "repository": "https://github.com/wrkzcoin/WrkzWalletShell",
   "main": "main.js",
