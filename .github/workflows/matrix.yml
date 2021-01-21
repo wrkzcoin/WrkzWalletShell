@@ -34,6 +34,7 @@ jobs:
           node-version: '10.x'
 
       - name: Add msbuild to PATH
+        if: matrix.target == 'x86_64-pc-windows-msvc'
         uses: microsoft/setup-msbuild@v1.0.2
 
       - name: Setup Cache
