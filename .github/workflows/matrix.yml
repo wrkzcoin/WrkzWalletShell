@@ -33,9 +33,10 @@ jobs:
         with:
           node-version: '10.x'
 
-      - name: Setup MSBuild.exe
-        if: matrix.os == 'windows-latest'
-        uses: warrenbuckley/Setup-MSBuild@v1
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.0.2
+        with:
+          vs-version: '[16.4,16.5)'
 
       - name: Setup Cache
         uses: actions/cache@v1
@@ -80,6 +81,8 @@ jobs:
         with:
           python-version: 3.8 # Or other version
       - name: Install awscli via pipx # Isolates dependencies
+        id: install-s3
+        continue-on-error: true
         shell: bash
         run: |
           export PATH=~/.local/bin:$PATH
@@ -87,6 +90,8 @@ jobs:
           pipx install awscli
           pip install --user pipx awscli-plugin-endpoint
       - name: S3 Upload
+        id: s3-upload
+        continue-on-error: true
         env:
           MINGW64_PATH: 'C:/Program Files/Git/mingw64/bin'
           BINARY_DISCORD_HOOK: ${{ secrets.DISCORD_HOOK }}
@@ -105,11 +110,11 @@ jobs:
           FILENAME="./${SOURCE_DIR}/${{ steps.before_deploy.outputs.file_name }}"
           FILESIZE=$(ls -lah "$FILENAME" | awk '{ print $5}')
           DATE_WITH_TIME=`date "+%Y%m%d-%H%M"`
-          SHA8=${COMMIT_SHA::8}
-          OUT_FILENAME="${DATE_WITH_TIME}-${COMMIT_SHA::8}-${{ matrix.target }}-${{ steps.before_deploy.outputs.file_name }}"
+          SHA8=${COMMIT_SHA::7}
+          OUT_FILENAME="${DATE_WITH_TIME}-${COMMIT_SHA::7}-${{ matrix.target }}-${{ steps.before_deploy.outputs.file_name }}"
           URL_FILE="\`\`\`${BINARY_UPLOAD}${DEST_DIR}/$OUT_FILENAME\`\`\`"
           BUILD_CONTENT="$RUNNER_OS-${{ matrix.target }}-$SHA8 Size: $FILESIZE "$URL_FILE
-          if [ "$RUNNER_OS" == "Windows" ] || [ "$RUNNER_OS" == "macOS" ]; then
+          if [ "$RUNNER_OS" == "macOS" ]; then
             ~/.local/bin/aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
             ~/.local/bin/aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
             ~/.local/bin/aws configure set default.region ${AWS_REGION}
@@ -117,6 +122,14 @@ jobs:
             ~/.local/bin/aws configure set aws_access_key_id null
             ~/.local/bin/aws configure set aws_secret_access_key null
             ~/.local/bin/aws configure set default.region null
+          elif [ "$RUNNER_OS" == "Windows" ]; then
+            aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
+            aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
+            aws configure set default.region ${AWS_REGION}
+            aws s3 cp "./${SOURCE_DIR}/${{ steps.before_deploy.outputs.file_name }}" "s3://${AWS_S3_BUCKET}/${DEST_DIR}/${OUT_FILENAME}" --no-progress --endpoint-url "${AWS_ENDPOINT}" --acl public-read
+            aws configure set aws_access_key_id null
+            aws configure set aws_secret_access_key null
+            aws configure set default.region null
           elif [ "$RUNNER_OS" == "Linux" ]; then
             aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
             aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
