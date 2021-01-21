@@ -49,6 +49,7 @@ config.remoteNodeListFallback = [
   'wrkz.xyz:17856',
   'fastpool.xyz:17856',
   'myexplorer.wrkz.work:17856',
+  'node-fin.wrkz.work:17856',
   'derogold4ever.online:17856',
   'wrkz.luxflow.net:17856',
 ];
